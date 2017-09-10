@@ -1,0 +1,19 @@
+{
+  "name": "code2pdf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Evan Lawrence-Hurt",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "codemirror": "^5.29.0",
+    "highlight.js": "^9.12.0",
+    "markdown": "^0.5.0",
+    "pdfkit": "^0.8.3",
+    "ramda": "^0.24.1"
+  }
+}
