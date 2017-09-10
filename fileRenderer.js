@@ -3,36 +3,42 @@ const R = require('ramda');
 const cheerio = require('cheerio');
 const highlight = require('highlight.js');
 const constants = require('./constants.js')
-class FileRenderer {
 
+class FileRenderer {
   constructor(filename) {
+    this.textNodes = [];
+
+    this.fileName = filename;
     this.file = fs.readFileSync(filename, 'utf8');
 
     let highlighted = highlight.highlightAuto(this.file, ['javascript']);
     let html = highlighted.value
     let $ = cheerio.load(html);
 
-    this.textNodes = [];
     this.recurseNodes($(':root'), undefined, $);
 
-    function newlineSplitter(text) {
-      let splitted = text.split(/\n/);
-      if (splitted.length === 1) {
-        return splitted;
-      }
-      return R.intersperse("\n", splitted).filter(t => {
-        return t.length !== 0;
-      });
-    }
     // put \n's in their own nodes by themselves
     this.textNodes = R.flatten(this.textNodes.map(n => {
-      let splitText = newlineSplitter(n.text);
+      let splitText = this._newlineSplitter(n.text);
       return splitText.map(t => {
         return R.merge(n, { text: t });
       })
     }));
   }
 
+  _newlineSplitter (text) {
+    let splitted = text.split(/\n/);
+    if (splitted.length === 1) {
+      return splitted;
+    }
+    return R.intersperse("\n", splitted).filter(t => {
+      return t.length !== 0;
+    });
+  }
+
+  _replaceTabs (text) {
+    return text.replace(/\t/g, '  ');
+  }
 
   recurseNodes (el, currentClass, $) {
     currentClass = currentClass || 'hljs';
@@ -47,7 +53,7 @@ class FileRenderer {
     if (thisElem[0].nodeType === constants.TEXT_NODE) {
       this.textNodes.push({
         "class": currentClass,
-        "text": thisElem.text()
+        "text": this._replaceTabs(thisElem.text())
       });
     }
 
@@ -57,8 +63,24 @@ class FileRenderer {
     }
   }
 
+  _renderTitle(doc) {
+
+    let height = doc.heightOfString(this.fileName) + 6;
+    doc.moveDown();
+    let y = doc.y - 6
+
+    doc.rect(0, y, 600, height)
+      .fillColor('#eee').fill();
+
+    doc.fillColor('#333')
+      .font('fonts/SourceCodePro-Bold.ttf')
+      .text(this.fileName)
+      .moveDown()
+
+  }
 
   render(doc, theme) {
+    this._renderTitle(doc);
     this.textNodes.forEach((node) => {
       let format = theme.match(node.class, 'hljs') || {};
       let opts = {
