@@ -11,7 +11,7 @@ class FileRenderer {
     this.fileName = filename;
     this.file = fs.readFileSync(filename, 'utf8');
 
-    let highlighted = highlight.highlightAuto(this.file, ['javascript']);
+    let highlighted = highlight.highlightAuto(this.file);
     let html = highlighted.value
     let $ = cheerio.load(html);
 
@@ -64,23 +64,28 @@ class FileRenderer {
   }
 
   _renderTitle(doc) {
+    let padding = 6;
 
-    let height = doc.heightOfString(this.fileName) + 6;
+    doc.font(constants.FONT.HEADER).fontSize(constants.FONT.HEADER_SIZE);
+
+    let height = doc.heightOfString(this.fileName) + padding*2;
     doc.moveDown();
-    let y = doc.y - 6
+    let y = doc.y - padding;
 
-    doc.rect(0, y, 600, height)
-      .fillColor('#eee').fill();
+    doc.rect(0, y, constants.PAPER.A4.WIDTH, height)
+      .fillColor('#eee')
+      .fill();
 
     doc.fillColor('#333')
-      .font('fonts/SourceCodePro-Bold.ttf')
       .text(this.fileName)
       .moveDown()
-
+    .fontSize()
   }
 
   render(doc, theme) {
     this._renderTitle(doc);
+    doc.fontSize(constants.FONT.BODY_SIZE);
+
     this.textNodes.forEach((node) => {
       let format = theme.match(node.class, 'hljs') || {};
       let opts = {
@@ -94,10 +99,10 @@ class FileRenderer {
       //   doc.font('fonts/SourceCodePro-Italic.ttf');
       // }
       if (format['font-weight'] === 'bold') {
-        doc.font('fonts/SourceCodePro-Bold.ttf');
+        doc.font(constants.FONT.BODY_BOLD);
       }
       else {
-        doc.font('fonts/SourceCodePro-Regular.ttf')
+        doc.font(constants.FONT.BODY_REGULAR)
       }
 
       doc.text(node.text, opts);

@@ -4,38 +4,17 @@ const highlight = require('highlight.js');
 const constants = require('./constants.js');
 const ThemeReader = require('./themeReader.js');
 const FileRenderer = require('./fileRenderer.js');
-// import PdfDocument from 'pdfkit';
-// import highlight from './highlight';
-// import constants from './constants';
-// import ThemeReader from './themeReader';
-// import FileRenderer from './fileRenderer';
-// import { join } from 'path'
-// import fs from 'fs'
-const path = require('path');
-const join = path.join;
+const directoryCrawler = require('./directoryCrawler.js');
+
 
 let githubTheme = new ThemeReader('./themes/github.css');
+let files = directoryCrawler.crawl('/Users/elh/code/relay/packages');
 
-function rreaddirSync (dir, allFiles = []) {
-  const files = fs.readdirSync(dir).map(f => join(dir, f))
-  //allFiles.push(...files)
-  files.forEach(f => {
-    let stat = fs.statSync(f)
-    if (stat.isDirectory())  {
-      rreaddirSync(f, allFiles)
-    }
-    else {
-      allFiles.push(f);
-    }
-  })
-  return allFiles
-}
-
-let files = rreaddirSync ('/Users/elh/code/preact/src');
 console.log(files);
-debugger;
-let doc = new PdfDocument();
-doc.fontSize(8);
+let doc = new PdfDocument({
+  margin: constants.MARGINS.VERTICAL,
+  size: 'A4'
+});
 
 let pages = 0;
 /*doc.on('pageAdded', e => {
@@ -57,7 +36,7 @@ files.forEach(file => {
   fr.render(doc, githubTheme);
 });
 
-doc.pipe(fs.createWriteStream('preact.pdf'))
+doc.pipe(fs.createWriteStream('relay.pdf'))
 doc.end()
 
 
