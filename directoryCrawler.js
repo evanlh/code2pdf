@@ -2,6 +2,7 @@ const path = require('path');
 const join = path.join;
 const fs = require('fs');
 
+// TODO make startDir file||directory
 function rreaddirSync (startDir, allFiles = []) {
   const dirs = [];
 

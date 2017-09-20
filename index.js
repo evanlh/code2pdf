@@ -16,5 +16,5 @@ console.log(commander.opts())
 code2pdf.createPDF({
   cssFile: commander.cssfile,
   directories: commander.directory.split(/\s+/),
-  outputFile: commander.outputfile
+  outputFile: commander.output
 });

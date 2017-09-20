@@ -23,8 +23,10 @@ module.exports = {
       files = files.concat(directoryCrawler.crawl(f));
     });
 
+    console.log("opts: ", opts)
     console.log(files);
 
+    debugger;
     let pageOpts = Object.assign({}, {
       margin: constants.MARGINS.VERTICAL,
       size: 'A4'
