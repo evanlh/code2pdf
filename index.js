@@ -5,10 +5,28 @@ const constants = require('./constants.js');
 const ThemeReader = require('./themeReader.js');
 const FileRenderer = require('./fileRenderer.js');
 const directoryCrawler = require('./directoryCrawler.js');
+const commander = require('commander');
 
 
-let githubTheme = new ThemeReader('./themes/github.css');
-let files = directoryCrawler.crawl('/Users/elh/code/relay/packages');
+commander
+.option('-t, --theme <cssfile>', 'Specify theme css')
+.option('-d, --directory <directory>', 'One or more directories to traverse')
+.option('-o, --output <outputfile>', 'Path to write PDF file to')
+.parse(process.argv);
+
+if (!commander.directory || !commander.output) {
+  commander.help();
+}
+debugger;
+let githubTheme = new ThemeReader(commander.cssfile || './themes/github.css');
+
+console.log(commander.opts())
+
+let filenames = commander.directory.split(/\s+/);
+let files = [];
+filenames.forEach((f) => {
+  files = files.concat(directoryCrawler.crawl(f));
+});
 
 console.log(files);
 let doc = new PdfDocument({
@@ -36,7 +54,7 @@ files.forEach(file => {
   fr.render(doc, githubTheme);
 });
 
-doc.pipe(fs.createWriteStream('relay.pdf'))
+doc.pipe(fs.createWriteStream(commander.output))
 doc.end()
 
 
