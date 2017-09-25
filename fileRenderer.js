@@ -13,6 +13,7 @@ class FileRenderer {
 
     let highlighted = highlight.highlightAuto(this.file);
     let html = highlighted.value
+    console.log(this.fileName, highlighted.language)
     let $ = cheerio.load(html);
 
     this.recurseNodes($(':root'), undefined, $);
