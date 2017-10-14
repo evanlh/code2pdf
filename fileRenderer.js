@@ -3,6 +3,7 @@ const R = require('ramda');
 const cheerio = require('cheerio');
 const highlight = require('highlight.js');
 const constants = require('./constants.js')
+const chooseLanguage = require('./languageChooser');
 
 class FileRenderer {
   constructor(filename) {
@@ -11,8 +12,16 @@ class FileRenderer {
     this.fileName = filename;
     this.file = fs.readFileSync(filename, 'utf8');
 
-    let highlighted = highlight.highlightAuto(this.file);
+    let language = chooseLanguage(filename);
+    if (language) {
+      let highlighted = highlight.highlight(language, this.file);
+    }
+    else {
+      let highlighted = highlight.highlightAuto(this.file);
+    }
+
     let html = highlighted.value
+
     console.log(this.fileName, highlighted.language)
     let $ = cheerio.load(html);
 
