@@ -13,16 +13,19 @@ class FileRenderer {
     this.file = fs.readFileSync(filename, 'utf8');
 
     let language = chooseLanguage(filename);
+
+    console.log(this.fileName, language)
+
+    var highlighted;
     if (language) {
-      let highlighted = highlight.highlight(language, this.file);
+      highlighted = highlight.highlight(language, this.file);
     }
     else {
-      let highlighted = highlight.highlightAuto(this.file);
+      highlighted = highlight.highlightAuto(this.file);
     }
 
     let html = highlighted.value
 
-    console.log(this.fileName, highlighted.language)
     let $ = cheerio.load(html);
 
     this.recurseNodes($(':root'), undefined, $);

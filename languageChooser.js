@@ -1,15 +1,23 @@
+// codemirror language ->
+CODEMIRROR_TO_HL = {
+  "clike": "cpp"
+}
+
 // get the code_mirror language names
-const highlightJS = require('highlightjs');
+const highlightJS = require('highlight.js');
 const ghLanguages = require('./languages.json');
 const langKeys = {};
 const extensionToCMLanguage = {};
+
+
 Object.keys(ghLanguages).forEach(function(key) {
-  let lang = langs[key];
+  let lang = ghLanguages[key];
   if (lang.codemirror_mode) {
+    console.log("ext ", lang.codemirror_mode, lang.extensions)
     langKeys[lang.codemirror_mode] = true;
 
-    if (lang.extension) {
-      lang.extension.forEach(function(extension) {
+    if (lang.extensions) {
+      lang.extensions.forEach(function(extension) {
         extensionToCMLanguage[extension] = lang.codemirror_mode;
       })
     }
@@ -19,7 +27,7 @@ Object.keys(ghLanguages).forEach(function(key) {
 // array of CM language names
 const cmLanguages = Object.keys(langKeys);
 // array of HL language names
-const hlLangs = hl.listLanguages();
+const hlLangs = highlightJS.listLanguages();
 
 /**
  * @param {String} filename
@@ -28,14 +36,21 @@ const hlLangs = hl.listLanguages();
 function chooseLanguage(filename) {
   var splitFn = filename.split(".");
   var extension = splitFn[splitFn.length - 1];
+  extension = "." + extension;
   var cmLanguageByExtension = extensionToCMLanguage[extension];
   if (!cmLanguageByExtension) {
     return;
   }
 
-  if (hlLangs.indexOf(cmLanguageByExtension) !== -1) {
+  if (CODEMIRROR_TO_HL[cmLanguageByExtension]) {
+    return CODEMIRROR_TO_HL[cmLanguageByExtension];
+  }
+  else if (hlLangs.indexOf(cmLanguageByExtension) !== -1) {
     return cmLanguageByExtension;
   }
+
 }
 
 module.exports = chooseLanguage;
+chooseLanguage.extensionToCMLanguage = extensionToCMLanguage;
+chooseLanguage.hlLangs = hlLangs;
