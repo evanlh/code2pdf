@@ -1,19 +1,18 @@
-// codemirror language ->
+const highlightJS = require('highlight.js');
+
+// codemirror language -> highlight.js language map
 CODEMIRROR_TO_HL = {
-  "clike": "cpp"
+  "clike": "cpp",
+  "commonlisp": "lisp"
 }
 
-// get the code_mirror language names
-const highlightJS = require('highlight.js');
+// get the code_mirror language names by extension
 const ghLanguages = require('./languages.json');
 const langKeys = {};
 const extensionToCMLanguage = {};
-
-
 Object.keys(ghLanguages).forEach(function(key) {
   let lang = ghLanguages[key];
   if (lang.codemirror_mode) {
-    console.log("ext ", lang.codemirror_mode, lang.extensions)
     langKeys[lang.codemirror_mode] = true;
 
     if (lang.extensions) {
@@ -34,10 +33,10 @@ const hlLangs = highlightJS.listLanguages();
  * @returns {String|undefined} The highlight.js language extension, or undefined if unknown
  */
 function chooseLanguage(filename) {
-  var splitFn = filename.split(".");
-  var extension = splitFn[splitFn.length - 1];
+  const splitFn = filename.split(".");
+  let extension = splitFn[splitFn.length - 1];
   extension = "." + extension;
-  var cmLanguageByExtension = extensionToCMLanguage[extension];
+  const cmLanguageByExtension = extensionToCMLanguage[extension];
   if (!cmLanguageByExtension) {
     return;
   }
@@ -52,5 +51,6 @@ function chooseLanguage(filename) {
 }
 
 module.exports = chooseLanguage;
+// for debug purposes
 chooseLanguage.extensionToCMLanguage = extensionToCMLanguage;
 chooseLanguage.hlLangs = hlLangs;

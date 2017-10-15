@@ -18,7 +18,8 @@ module.exports = {
    * @param {String} [opts.pageOptions.size] A2|A3|A4|A5|A6
    */
   createPDF: function(opts) {
-    let githubTheme = new ThemeReader(opts.cssFile || './themes/github.css');
+    let githubTheme = new ThemeReader(opts.cssFile ||
+                                      __dirname + '/themes/github.css');
     let paths = opts.directories;
     let files = [];
     paths.forEach((f) => {

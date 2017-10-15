@@ -3,10 +3,10 @@ const TEXT_NODE = 3;
 module.exports = {
   TEXT_NODE: TEXT_NODE,
   FONT: {
-    HEADER: 'fonts/RobotoCondensed-Regular.ttf',
+    HEADER: __dirname + '/fonts/RobotoCondensed-Regular.ttf',
     HEADER_SIZE: 12,
-    BODY_BOLD: 'fonts/SourceCodePro-Bold.ttf',
-    BODY_REGULAR: 'fonts/SourceCodePro-Regular.ttf',
+    BODY_BOLD: __dirname + '/fonts/SourceCodePro-Bold.ttf',
+    BODY_REGULAR: __dirname + '/fonts/SourceCodePro-Regular.ttf',
     BODY_SIZE: 8
   },
   PAPER: {
