@@ -1,10 +1,10 @@
 {
   "name": "code2pdf",
   "version": "1.0.0",
-  "description": "",
+  "description": "Beautiful Print-ready Code",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "code2pdf": "node ~/code/code2pdf/index.js %npm_config_myflag%"
   },
   "author": "Evan Lawrence-Hurt",
   "license": "ISC",

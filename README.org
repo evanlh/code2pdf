@@ -1,0 +1,33 @@
+* Installation
+#+begin_src sh
+npm i
+#+end_src
+
+* Usage
+To print usage info
+#+begin_src sh
+  $ npm run code2pdf
+#+end_src
+
+Which will echo...
+
+#+begin_src txt
+Usage: index [options]
+
+Options:
+  -t, --theme <cssfile>        Specify theme css
+  -d, --directory <directory>  One or more directories to traverse
+  -o, --output <outputfile>    Path to write PDF file to
+  -p, --pagesize <pagesize>    A3|A4|A5|A6
+  -h, --help                   output usage information
+#+end_src
+
+To pass arguments in, use `npm run`'s facility:
+#+begin_src sh
+  $ npm run code2pdf -- -d /path/to/my/code -o /path/to/output.pdf
+#+end_src
+
+* Bugs & Issues
+- You have to be very explicit about what the directory you want crawled (usually `src`) because detection of what is vs is not source code is currently /very/ poor.
+- There is currently no way of specifying globs of files to include/exclude
+- I need to upgrade the version of highlight.js
