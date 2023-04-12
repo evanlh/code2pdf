@@ -1,3 +1,11 @@
+* What is this?
+
+One day I woke up & thought "Wouldn't it be nice to be able to study a codebase like a book? Just curl up with a repo & study away, no distractions or notifications?"
+
+This is an attempt to answer that question. The answer is it's not very nice, codebases are just too big, it's like reading a non-linear War & Peace without the aid of hypertext navigation.
+
+But you're welcome to try for yourself, it was still a fun experiment.
+
 * Installation
 #+begin_src sh
 npm i
